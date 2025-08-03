@@ -7,6 +7,22 @@ import { UserMapper } from "./user_mapper";
 
 export class BookingMapper {
   static toDomain(entity: BookingEntity, property?: Property): Booking {
+    if (!entity.id) {
+      throw new Error("O ID da reserva é obrigatório");
+    }
+
+    if (!entity.guest) {
+      throw new Error("O hóspede da reserva é obrigatório");
+    }
+
+    if (entity.guestCount <= 0) {
+      throw new Error("O número de hóspedes deve ser maior que zero");
+    }
+
+    if (entity.totalPrice < 0) {
+      throw new Error("O preço total não pode ser negativo");
+    }
+
     const guest = UserMapper.toDomain(entity.guest);
     const dateRange = new DateRange(entity.startDate, entity.endDate);
 
@@ -25,6 +41,22 @@ export class BookingMapper {
   }
 
   static toPersistence(domain: Booking): BookingEntity {
+    if (!domain.getId()) {
+      throw new Error("O ID da reserva é obrigatório");
+    }
+
+    if (!domain.getProperty() || !domain.getGuest()) {
+      throw new Error("A propriedade e o hóspede são obrigatórios");
+    }
+
+    if (domain.getGuestCount() <= 0) {
+      throw new Error("O número de hóspedes deve ser maior que zero");
+    }
+
+    if (domain.getTotalPrice() < 0) {
+      throw new Error("O preço total não pode ser negativo");
+    }
+
     const entity = new BookingEntity();
     entity.id = domain.getId();
     entity.property = PropertyMapper.toPersistence(domain.getProperty());
