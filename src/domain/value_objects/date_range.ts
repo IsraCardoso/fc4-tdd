@@ -1,4 +1,10 @@
 export class DateRange {
+  toObject() {
+    return {
+      startDate: this.startDate,
+      endDate: this.endDate
+    };
+  }
   private readonly startDate: Date;
   private readonly endDate: Date;
 

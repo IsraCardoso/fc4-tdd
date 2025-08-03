@@ -73,4 +73,14 @@ export class Property {
   addBooking(booking: Booking): void {
     this.bookings.push(booking);
   }
+
+  toObject() {
+    return {
+      id: this.id,
+      name: this.name,
+      description: this.description,
+      maxGuests: this.maxGuests,
+      basePricePerNight: this.basePricePerNight
+    };
+  }
 }

@@ -88,4 +88,16 @@ export class Booking {
     this.totalPrice = refundRule.calculateRefund(this.totalPrice);
     this.status = "CANCELLED";
   }
+
+  toObject() {
+    return {
+      id: this.id,
+      property: this.property.toObject(),
+      guest: this.guest.toObject(),
+      dateRange: this.dateRange.toObject(),
+      guestCount: this.guestCount,
+      status: this.status,
+      totalPrice: this.totalPrice
+    };
+  }
 }

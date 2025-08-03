@@ -20,4 +20,11 @@ export class User {
   getName(): string {
     return this.name;
   }
+
+  toObject() {
+    return {
+      id: this.id,
+      name: this.name
+    };
+  }
 }
