@@ -1,0 +1,70 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.1.3/schema.json",
+	"vcs": { "enabled": false, "clientKind": "git", "useIgnoreFile": false },
+	"files": { "ignoreUnknown": false },
+	"formatter": {
+	  "enabled": true,
+	  "formatWithErrors": false,
+	  "indentStyle": "space",
+	  "indentWidth": 2,
+	  "lineEnding": "lf",
+	  "lineWidth": 80,
+	  "attributePosition": "auto",
+	  "bracketSameLine": false,
+	  "bracketSpacing": true,
+	  "expand": "auto",
+	  "useEditorconfig": true,
+	  "includes": [
+		"**",
+		"!**/package.json",
+		"!**/package-lock.json",
+		"!**/yarn.lock",
+		"!**/deployECS-CF.sh",
+		"!**/dist",
+		"!**/node_modules",
+		"!**/.nyc_output",
+		"!**/.vscode",
+		"!**/cloudformation",
+		"!**/*.yml"
+	  ]
+	},
+	"linter": { "enabled": true, "rules": { "recommended": false } },
+	"javascript": {
+	  "formatter": {
+		"jsxQuoteStyle": "double",
+		"quoteProperties": "asNeeded",
+		"trailingCommas": "none",
+		"semicolons": "asNeeded",
+		"arrowParentheses": "always",
+		"bracketSameLine": false,
+		"quoteStyle": "single",
+		"attributePosition": "auto",
+		"bracketSpacing": true
+	  }
+	},
+	"html": { "formatter": { "selfCloseVoidElements": "always" } },
+	"overrides": [
+	  {
+		"includes": ["**/*.ts"],
+		"linter": {
+		  "rules": {
+			"correctness": {
+			  "noConstantCondition": "error",
+			  "noUnsafeOptionalChaining": "off",
+			  "noUnusedVariables": "warn"
+			},
+			"style": { "noParameterAssign": "error" },
+			"suspicious": {
+			  "noEmptyBlockStatements": "error",
+			  "noExplicitAny": "off"
+			}
+		  }
+		}
+	  }
+	],
+	"assist": {
+	  "enabled": true,
+	  "actions": { "source": { "organizeImports": "on" } }
+	}
+  }
+  
