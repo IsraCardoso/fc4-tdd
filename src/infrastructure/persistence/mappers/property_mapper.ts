@@ -1,18 +1,20 @@
 import { Property } from "../../../domain/entities/property";
 import { PropertyEntity } from "../entities/property_entity";
+import { ValidationError } from "../../../shared/errors/app_error";
+import { PROPERTY_ERRORS } from "../../../shared/errors/error_messages";
 
 export class PropertyMapper {
   static toDomain(entity: PropertyEntity): Property {
     if (!entity.id || !entity.name) {
-      throw new Error("ID e nome da propriedade são obrigatórios");
+      throw new ValidationError(PROPERTY_ERRORS.NAME_REQUIRED);
     }
     
     if (entity.maxGuests <= 0) {
-      throw new Error("O número máximo de hóspedes deve ser maior que zero");
+      throw new ValidationError(PROPERTY_ERRORS.MAX_GUESTS_INVALID);
     }
 
     if (entity.basePricePerNight <= 0) {
-      throw new Error("O preço base por noite deve ser maior que zero");
+      throw new ValidationError(PROPERTY_ERRORS.BASE_PRICE_INVALID);
     }
 
     return new Property(
@@ -26,7 +28,7 @@ export class PropertyMapper {
 
   static toPersistence(domain: Property): PropertyEntity {
     if (!domain.getId() || !domain.getName()) {
-      throw new Error("ID e nome da propriedade são obrigatórios");
+      throw new ValidationError(PROPERTY_ERRORS.NAME_REQUIRED);
     }
 
     const entity = new PropertyEntity();

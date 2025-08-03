@@ -47,7 +47,6 @@ describe("Booking Entity", () => {
   });
 
   it("deve calcular o preço total com desconto", () => {
-    // Arrange
     const property = new Property("1", "Casa", "Descrição", 4, 300);
     const user = new User("1", "José Santos");
     const dateRange = new DateRange(
@@ -55,15 +54,12 @@ describe("Booking Entity", () => {
       new Date("2024-12-10")
     );
 
-    // Act
     const booking = new Booking("1", property, user, dateRange, 4);
 
-    // Assert
     expect(booking.getTotalPrice()).toBe(300 * 9 * 0.9);
   });
 
   it("não deve realizar o agendamento, quando uma propriedade não estiver disponínvel", () => {
-    // Arrange
     const property = new Property("1", "Casa", "Descrição", 4, 300);
     const user = new User("1", "José Santos");
     const dateRange = new DateRange(

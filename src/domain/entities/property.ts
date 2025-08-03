@@ -1,8 +1,33 @@
 import { DateRange } from "../value_objects/date_range";
 import { Booking } from "./booking";
+import { PROPERTY_ERRORS } from "../../shared/errors/error_messages";
+import { createValidator } from "../../shared/utils/validation_utils";
+import { ValidationError } from "../../shared/errors/app_error";
+
+type PropertyData = {
+  name: string;
+  description: string;
+  maxGuests: number;
+  basePricePerNight: number;
+};
 
 export class Property {
   private readonly bookings: Booking[] = [];
+  private static readonly validator = createValidator<PropertyData>({
+    name: {
+      validate: (value: string) => !!value?.trim(),
+      message: PROPERTY_ERRORS.NAME_REQUIRED
+    },
+    maxGuests: {
+      validate: (value: number) => value > 0,
+      message: PROPERTY_ERRORS.MAX_GUESTS_INVALID
+    },
+    basePricePerNight: {
+      validate: (value: number) => value > 0,
+      message: PROPERTY_ERRORS.BASE_PRICE_INVALID
+    }
+  });
+
   constructor(
     private id: string,
     private name: string,
@@ -10,12 +35,13 @@ export class Property {
     private maxGuests: number,
     private basePricePerNight: number
   ) {
-    if (!name) {
-      throw new Error("O nome é obrigatório");
-    }
-    if (maxGuests <= 0) {
-      throw new Error("O número máximo de hóspedes deve ser maior que zero");
-    }
+    Property.validator.validateAll({
+      name,
+      description,
+      maxGuests,
+      basePricePerNight
+    });
+    
     this.id = id;
     this.name = name;
     this.description = description;
@@ -45,9 +71,7 @@ export class Property {
 
   validateGuestCount(guestCount: number): void {
     if (guestCount > this.maxGuests) {
-      throw new Error(
-        `Número máximo de hóspedes excedido. Máximo permitido: ${this.maxGuests}.`
-      );
+      throw new ValidationError(PROPERTY_ERRORS.MAX_GUESTS_EXCEEDED(this.maxGuests));
     }
   }
 

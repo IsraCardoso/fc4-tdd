@@ -4,23 +4,25 @@ import { DateRange } from "../../../domain/value_objects/date_range";
 import { BookingEntity } from "../entities/booking_entity";
 import { PropertyMapper } from "./property_mapper";
 import { UserMapper } from "./user_mapper";
+import { ValidationError } from "../../../shared/errors/app_error";
+import { BOOKING_ERRORS } from "../../../shared/errors/error_messages";
 
 export class BookingMapper {
   static toDomain(entity: BookingEntity, property?: Property): Booking {
     if (!entity.id) {
-      throw new Error("O ID da reserva é obrigatório");
+      throw new ValidationError(BOOKING_ERRORS.ID_REQUIRED);
     }
 
     if (!entity.guest) {
-      throw new Error("O hóspede da reserva é obrigatório");
+      throw new ValidationError(BOOKING_ERRORS.GUEST_REQUIRED);
     }
 
     if (entity.guestCount <= 0) {
-      throw new Error("O número de hóspedes deve ser maior que zero");
+      throw new ValidationError(BOOKING_ERRORS.GUEST_COUNT_INVALID);
     }
 
     if (entity.totalPrice < 0) {
-      throw new Error("O preço total não pode ser negativo");
+      throw new ValidationError(BOOKING_ERRORS.TOTAL_PRICE_INVALID);
     }
 
     const guest = UserMapper.toDomain(entity.guest);
@@ -42,19 +44,19 @@ export class BookingMapper {
 
   static toPersistence(domain: Booking): BookingEntity {
     if (!domain.getId()) {
-      throw new Error("O ID da reserva é obrigatório");
+      throw new ValidationError(BOOKING_ERRORS.ID_REQUIRED);
     }
 
     if (!domain.getProperty() || !domain.getGuest()) {
-      throw new Error("A propriedade e o hóspede são obrigatórios");
+      throw new ValidationError(BOOKING_ERRORS.PROPERTY_AND_GUEST_REQUIRED);
     }
 
     if (domain.getGuestCount() <= 0) {
-      throw new Error("O número de hóspedes deve ser maior que zero");
+      throw new ValidationError(BOOKING_ERRORS.GUEST_COUNT_INVALID);
     }
 
     if (domain.getTotalPrice() < 0) {
-      throw new Error("O preço total não pode ser negativo");
+      throw new ValidationError(BOOKING_ERRORS.TOTAL_PRICE_INVALID);
     }
 
     const entity = new BookingEntity();

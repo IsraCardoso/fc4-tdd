@@ -4,6 +4,17 @@ import { RefundRuleFactory } from "../cancelation/refund_rule_factory";
 import { DateRange } from "../value_objects/date_range";
 import { Property } from "./property";
 import { User } from "./user";
+import { BOOKING_ERRORS } from "../../shared/errors/error_messages";
+import { createValidator } from "../../shared/utils/validation_utils";
+import { ValidationError } from "../../shared/errors/app_error";
+
+type BookingData = {
+  id: string;
+  property: Property;
+  guest: User;
+  dateRange: DateRange;
+  guestCount: number;
+};
 
 export class Booking {
   private readonly id: string;
@@ -13,6 +24,13 @@ export class Booking {
   private readonly guestCount: number;
   private status: "CONFIRMED" | "CANCELLED" = "CONFIRMED";
   private totalPrice: number;
+  
+  private static readonly validator = createValidator<BookingData>({
+    guestCount: {
+      validate: (value: number) => value > 0,
+      message: BOOKING_ERRORS.GUEST_COUNT_INVALID
+    }
+  });
 
   constructor(
     id: string,
@@ -21,15 +39,12 @@ export class Booking {
     dateRange: DateRange,
     guestCount: number
   ) {
-    if (guestCount <= 0) {
-      throw new Error("O número de hóspedes deve ser maior que zero.");
-    }
+    Booking.validator.validateAll({ id, property, guest, dateRange, guestCount });
+    
     property.validateGuestCount(guestCount);
 
     if (!property.isAvailable(dateRange)) {
-      throw new Error(
-        "A propriedade não está disponível para o período selecionado."
-      );
+      throw new ValidationError(BOOKING_ERRORS.PROPERTY_UNAVAILABLE);
     }
 
     this.id = id;
@@ -77,7 +92,7 @@ export class Booking {
 
   cancel(currentDate: Date): void {
     if (this.status === "CANCELLED") {
-      throw new Error("A reserva já está cancelada.");
+      throw new ValidationError(BOOKING_ERRORS.ALREADY_CANCELLED);
     }
 
     const checkInDate = this.dateRange.getStartDate();

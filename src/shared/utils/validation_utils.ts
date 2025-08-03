@@ -29,10 +29,8 @@ export class Validator<T extends object> {
   }
 
   validateAll(data: T): void {
-    // Get all keys from the validation rules
     const fields = Object.keys(this.validations) as Array<keyof T>;
     
-    // Validate each field that has a validation rule
     for (const field of fields) {
       if (field in data) {
         this.validate(field, data[field]);
