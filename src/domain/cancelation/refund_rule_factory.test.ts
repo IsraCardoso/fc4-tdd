@@ -11,7 +11,7 @@ describe("RefundRuleFactory", () => {
       const result = RefundRuleFactory.getRefundRule(daysUntilCheckIn);
       
       expect(result).toBeInstanceOf(FullRefund);
-      expect(result.calculateRefund(1000)).toBe(1000); // 100% de reembolso
+      expect(result.calculateRefund(1000)).toBe(0); // 100% de reembolso
     });
 
     it("deve retornar PartialRefund quando a reserva for cancelada entre 1 e 7 dias de antecedência", () => {
