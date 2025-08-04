@@ -5,7 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "dev": "ts-node src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "debug": "node --inspect-brk -r ts-node/register src/index.ts",
+    "debug:test": "node --inspect-brk node_modules/jest/bin/jest --runInBand",
+    "debug:test:watch": "node --inspect-brk node_modules/jest/bin/jest --runInBand --watch",
+    "debug:dev": "NODE_ENV=development node --inspect-brk -r ts-node/register --require tsconfig-paths/register src/index.ts"
   },
   "keywords": [],
   "author": "",

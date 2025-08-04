@@ -1,6 +1,6 @@
-import { CreateBookingDTO } from "../../application/dtos/create_booking_dto";
-import { BookingService } from "../../application/services/booking_service";
 import { Request, Response } from "express";
+import { BookingService } from "../../application/services/booking_service";
+import { CreateBookingDTO } from "../../application/dtos/create_booking_dto";
 
 export class BookingController {
   private bookingService: BookingService;
@@ -22,7 +22,7 @@ export class BookingController {
 
       const dto: CreateBookingDTO = {
         propertyId: req.body.propertyId,
-        guestId: req.body.userId,
+        guestId: req.body.guestId,
         startDate: startDate,
         endDate: endDate,
         guestCount: req.body.guestCount,

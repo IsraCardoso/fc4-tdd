@@ -16,16 +16,16 @@ export class Property {
   private static readonly validator = createValidator<PropertyData>({
     name: {
       validate: (value: string) => !!value?.trim(),
-      message: PROPERTY_ERRORS.NAME_REQUIRED
+      message: PROPERTY_ERRORS.NAME_REQUIRED,
     },
     maxGuests: {
       validate: (value: number) => value > 0,
-      message: PROPERTY_ERRORS.MAX_GUESTS_INVALID
+      message: PROPERTY_ERRORS.MAX_GUESTS_INVALID,
     },
     basePricePerNight: {
       validate: (value: number) => value > 0,
-      message: PROPERTY_ERRORS.BASE_PRICE_INVALID
-    }
+      message: PROPERTY_ERRORS.BASE_PRICE_INVALID,
+    },
   });
 
   constructor(
@@ -39,9 +39,9 @@ export class Property {
       name,
       description,
       maxGuests,
-      basePricePerNight
+      basePricePerNight,
     });
-    
+
     this.id = id;
     this.name = name;
     this.description = description;
@@ -71,7 +71,9 @@ export class Property {
 
   validateGuestCount(guestCount: number): void {
     if (guestCount > this.maxGuests) {
-      throw new ValidationError(PROPERTY_ERRORS.MAX_GUESTS_EXCEEDED(this.maxGuests));
+      throw new ValidationError(
+        PROPERTY_ERRORS.MAX_GUESTS_EXCEEDED(this.maxGuests)
+      );
     }
   }
 
@@ -104,7 +106,7 @@ export class Property {
       name: this.name,
       description: this.description,
       maxGuests: this.maxGuests,
-      basePricePerNight: this.basePricePerNight
+      basePricePerNight: this.basePricePerNight,
     };
   }
 }
